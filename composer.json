@@ -1,0 +1,6 @@
+{
+    "require": {
+        "fightbulc/jsonrpc_curl": "*",
+        "simplon/mysql": "*"
+    }
+}

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSON Parser</title>
+    <meta name="viewport" content="width=device-width">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <link href="bootstrap-3.2.0-dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="master.css">
+</head>
+
+<body class="beautify">
+<div class="ui-editor">
+
+    <div style="padding:40px">
+        <form action="" method="post" role="form">
+            <p>
+                <label>Sessions</label>
+                <select class="form-control input-lg" name="session">
+                    {{sessions}}
+                </select>
+            </p>
+
+            <p style="margin-top:35px">
+                <label>Enter api root url</label>
+                <input class="form-control input-lg" type="text" name="url" value="{{url}}">
+            </p>
+
+            <p style="margin-top:35px">
+                <label>Enter api</label>
+                <input class="form-control input-lg" type="text" name="api" value="{{api}}">
+            </p>
+
+            <p style="margin-top:35px">
+                <label>Enter params</label>
+                <textarea class="form-control input-lg" name="params">{{params}}</textarea>
+            </p>
+
+            <p style="margin-top:35px">
+                <input class="btn btn-info btn-lg" id="submit" type="submit" data-loading-text="Loading data..." value="Request API">&nbsp;&nbsp;or&nbsp;&nbsp;<a href="">Reset settings</a>
+            </p>
+        </form>
+    </div>
+
+    <textarea style="display:none" class="ui-field json" id="editor" spellcheck="false" contenteditable="true">{{response}}</textarea>
+
+    <div class="ui-resizer"></div>
+</div>
+<div class="ui-aside">
+    <div class="ui-notification" id="status"></div>
+    <div class="ui-menu">
+        <div class="ui-menu-dropdown">
+            <div class="ui-menu-panel">
+                <div class="ui-menu-item ui-option" id="beautify">Beautify</div>
+                <div class="ui-menu-item ui-option" id="show-types">Show Types</div>
+                <div class="ui-menu-item ui-option" id="show-indexes">Show Indexes</div>
+                <div class="ui-menu-item about" style="display:none">About</div>
+            </div>
+        </div>
+    </div>
+    <div class="ui-treeview json" id="result"></div>
+</div>
+
+<script src="master.js"></script>
+<script src="jquery.min.js"></script>
+<script src="bootstrap-3.2.0-dist/js/bootstrap.min.js"></script>
+
+<script>
+    (function ($) {
+        $('select').change(function () {
+            $('#submit').click();
+        });
+
+        $('#submit').click(function () {
+            var $btn = $(this);
+            $btn.addClass('btn-default').button('loading');
+        });
+    })($);
+</script>
+</body>
+
+</html>
