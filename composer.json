@@ -1,6 +1,9 @@
 {
     "require": {
-        "fightbulc/jsonrpc_curl": "*",
         "simplon/mysql": "*"
+    },
+
+    "autoload": {
+        "classmap": ["request.php"]
     }
 }

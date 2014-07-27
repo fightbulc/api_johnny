@@ -158,13 +158,7 @@ if ($_POST)
         parse_str($parsedParams, $params);
         trimValues($params);
 
-        // hit up api
-        $response = (new JsonRpcCurl())
-            ->setUrl($url)
-            ->setId(1)
-            ->setMethod($_POST['api'])
-            ->setData($params)
-            ->send();
+        $response = Request::jsonRpc($url, $_POST['api'], $params);
 
         if ($response)
         {
