@@ -153,9 +153,6 @@ if ($_POST)
 
     if (empty($_POST['session']))
     {
-        $parts = explode('.', $_POST['api']);
-        $domain = array_shift($parts);
-        $domain = strtolower($domain);
         $url = trim($_POST['url'], '/');
         $parsedParams = preg_replace("/\n/", "&", $_POST['params']);
         parse_str($parsedParams, $params);
@@ -163,7 +160,7 @@ if ($_POST)
 
         // hit up api
         $response = (new JsonRpcCurl())
-            ->setUrl($url . '/' . $domain)
+            ->setUrl($url)
             ->setId(1)
             ->setMethod($_POST['api'])
             ->setData($params)
