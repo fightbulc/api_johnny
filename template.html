@@ -41,6 +41,7 @@
                 <input class="btn btn-info btn-lg" id="submit" type="submit" data-loading-text="Loading data..." value="Request API">&nbsp;&nbsp;or&nbsp;&nbsp;<a href="">Reset settings</a>
             </p>
         </form>
+        <small style="display:block;margin-top:30px;color:#ccc">{{curlRequest}}</small>
     </div>
 
     <textarea style="display:none" class="ui-field json" id="editor" spellcheck="false" contenteditable="true">{{response}}</textarea>
@@ -55,24 +56,31 @@
                 <div class="ui-menu-item ui-option" id="beautify">Beautify</div>
                 <div class="ui-menu-item ui-option" id="show-types">Show Types</div>
                 <div class="ui-menu-item ui-option" id="show-indexes">Show Indexes</div>
+                <div class="ui-menu-item ui-option" id="expand">Expand</div>
+                <div class="ui-menu-item ui-option" id="collapsed">Collapse</div>
                 <div class="ui-menu-item about" style="display:none">About</div>
             </div>
         </div>
     </div>
+    <div style="padding:30px 30px 0;font-weight:bold">{{httpCode}} RESPONSE CODE</div>
     <div class="ui-treeview json" id="result"></div>
 </div>
+
 
 <script src="jquery.min.js"></script>
 <script src="bootstrap-3.2.0-dist/js/bootstrap.min.js"></script>
 <script src="master.js"></script>
 
 <script>
-    (function ($) {
-        $('select').change(function () {
+    (function ($)
+    {
+        $('select').change(function ()
+        {
             $('#submit').click();
         });
 
-        $('#submit').click(function () {
+        $('#submit').click(function ()
+        {
             var $btn = $(this);
             $btn.addClass('btn-warning').button('loading');
         });

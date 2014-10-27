@@ -12,11 +12,15 @@ class Request
         $curl = curl_init();
         curl_setopt_array($curl, $opt);
         $response = curl_exec($curl);
+        $curlInfo = curl_getinfo($curl);
         curl_close($curl);
 
         if ($response)
         {
-            return (string)$response;
+            return [
+                'httpCode' => $curlInfo['http_code'],
+                'response' => (string)$response,
+            ];
         }
 
         return false;
@@ -81,16 +85,19 @@ class Request
         ];
 
         // request
-        $response = self::process($opt);
+        $request = self::process($opt);
 
         // decode json
-        $decoded = json_decode($response, true);
+        $decoded = json_decode($request['response'], true);
 
         if ($decoded === null)
         {
-            throw new \Exception('JSONRPC request error: ' . $response);
+            throw new \Exception($request['response'], $request['httpCode']);
         }
 
-        return (array)$decoded;
+        return [
+            'httpCode' => $request['httpCode'],
+            'response' => (array)$decoded,
+        ];
     }
 }

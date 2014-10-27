@@ -21,7 +21,20 @@
         {
             node.addEventListener(event_click, function ()
             {
-                document.querySelector('body').classList.toggle(this.id)
+                if (this.id === 'expand')
+                {
+                    $('ul:first').find('span[data-property-name="result"]').parent().parent().find('.toggle').parent().removeClass('collapsed');
+                }
+                else if (this.id === 'collapsed')
+                {
+                    $('ul:first').find('.toggle').parent().addClass('collapsed');
+                    $('ul:first').find('span[data-property-name="result"]').parent().next().find('.toggle:first').click();
+                    $('ul:first').find('span[data-property-name="error"]').parent().next().find('.toggle:first').click();
+                }
+                else
+                {
+                    document.querySelector('body').classList.toggle(this.id)
+                }
             }, false)
         }
         (function ()
@@ -470,6 +483,7 @@
                 if ($('ul:first').find('span[data-property-name="jsonrpc"]').length)
                 {
                     $('ul:first').find('span[data-property-name="result"]').parent().next().find('.toggle:first').click();
+                    $('ul:first').find('span[data-property-name="error"]').parent().next().find('.toggle:first').click();
                 }
 
                 if (!result.valid)

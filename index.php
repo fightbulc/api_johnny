@@ -153,25 +153,71 @@ if ($_POST)
 
     if (empty($_POST['session']))
     {
-        $url = trim($_POST['url'], '/');
+        $url = trim($_POST['url'], '/') . '/';
+        $_POST['params'] = preg_replace('/= +/', '=', $_POST['params']);
         $parsedParams = preg_replace("/\n/", "&", $_POST['params']);
         parse_str($parsedParams, $params);
         trimValues($params);
 
-        $response = Request::jsonRpc($url, $_POST['api'], $params);
+        // fill in tags
+        $curlData = [
+            'jsonrpc' => '2.0',
+            'id'      => 1,
+            'method'  => $_POST['api'],
+            'params'  => $params,
+        ];
 
-        if ($response)
+        try
         {
-            if (isset($response['error']))
+            $request = Request::jsonRpc($url, $_POST['api'], $params);
+        }
+        catch (\Exception $e)
+        {
+            $request = [
+                'httpCode' => $e->getCode(),
+                'response' => [
+                    'error' => [
+                        'message' => $e->getMessage(),
+                        'file'    => $e->getFile(),
+                        'line'    => $e->getLine(),
+                        'trace'   => $e->getTrace(),
+                    ],
+                ]
+            ];
+        }
+
+        if ($request)
+        {
+            $response = $request['response'];
+
+            if (isset($response['error']) && !isset($response['id']))
             {
-                $response = $response['error'];
+                $response = [
+                    'jsonrpc' => '2.0',
+                    'error'   => $response['error'],
+                    'id'      => 1,
+                ];
             }
 
+            $httpCode = $request['httpCode'];
+
+            if (preg_match('/^[45]/', $httpCode))
+            {
+                $httpCode = '<span style="font-size:22px;color:#c00">' . $httpCode . '</span>';
+            }
+
+            else
+            {
+                $httpCode = '<span style="font-size:22px;color:#090">' . $httpCode . '</span>';
+            }
+
+            $template = str_replace('{{httpCode}}', $httpCode, $template);
             $template = str_replace('{{response}}', json_encode($response), $template);
         }
+
+        $template = str_replace('{{curlRequest}}', 'CURL -v -H \'Content-type: application/json\' \'' . $url . '\' -d \'' . json_encode($curlData) . '\'', $template);
     }
 
-    // fill in tags
     $template = str_replace('{{url}}', $_POST['url'], $template);
     $template = str_replace('{{api}}', $_POST['api'], $template);
     $template = str_replace('{{params}}', $_POST['params'], $template);
