@@ -1,6 +1,7 @@
 <?php
 
 require __DIR__ . '/vendor/autoload.php';
+$config = require __DIR__ . '/config.php';
 
 session_start();
 
@@ -28,7 +29,9 @@ function trimValues(array &$array)
  */
 function getDbInstance()
 {
-    return new \Simplon\Mysql\Mysql('127.0.0.1', 'rootuser', 'rootuser', 'johnny');
+    global $config;
+
+    return new \Simplon\Mysql\Mysql($config['db']['host'], $config['db']['user'], $config['db']['password'], 'johnny');
 }
 
 // --------------------------------------
